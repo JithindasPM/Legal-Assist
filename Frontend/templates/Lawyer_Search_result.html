@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+{% extends 'Home.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="team">
+    <div class="container">
+        <div class="section-header">
+            <h2>Meet Our Expert Attorneys</h2>
+        </div>
+        <div class="row">
+            {% if request.session.username %}
+                {% for l in vak %}
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="team-item">
+                            <div class="team-img">
+                                <img src="{{ l.Image.url }}" alt="Team Image">
+                            </div>
+                            <div class="team-text">
+                                <h2>{{ l.Name }}</h2>
+<!--                                <p>{{ l.Qualification }}</p> &lt;!&ndash; Display qualification &ndash;&gt;-->
+                                <p>{{ l.Specialization }}</p> <!-- Assuming you want to display specialization -->
+                                <form method="post" action="{% url 'payment' lawyers_id=l.id %}">
+                                 {% csrf_token %}
+                                <button type="submit" class="btn btn-primary" style="margin-top:10px;">Book Appointment</button>
+                                </form>
+                                <div class="team-social">
+                                    <a class="social-tw" href=""><i class="fab fa-twitter"></i></a>
+                                    <a class="social-fb" href=""><i class="fab fa-facebook-f"></i></a>
+                                    <a class="social-li" href=""><i class="fab fa-linkedin-in"></i></a>
+                                    <a class="social-in" href=""><i class="fab fa-instagram"></i></a>
+                                </div>
+                            </div>
+
+                        </div>
+                        </form>
+                    </div>
+                {% empty %}
+                    <div class="col-12">
+                        <p>No results found.</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p style="background-color: #f0f0f0; padding: 10px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif; color: #333; text-align: center;">Please log in as a user to view the search results.</p>
+
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+</html>
+{% endblock %}

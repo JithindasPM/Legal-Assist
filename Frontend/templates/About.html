@@ -1,0 +1,454 @@
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Kanun - Law Firm Website Template</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta content="Law Firm Website Template" name="keywords">
+        <meta content="Law Firm Website Template" name="description">
+
+        <!-- Favicon -->
+        <link href="{% static 'mech/img/favicon.ico' %}" rel="icon">
+
+        <!-- Google Font -->
+        <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@1,600;1,700;1,800&family=Roboto:wght@400;500&display=swap" rel="stylesheet"> 
+        
+        <!-- CSS Libraries -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+        <link href="{% static 'mech/lib/animate/animate.min.css' %}" rel="stylesheet">
+        <link href="{% static 'mech/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+        <!-- Template Stylesheet -->
+        <link href="{% static 'mech/css/style.css' %}" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="wrapper">
+            <!-- Top Bar Start -->
+            <div class="top-bar">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="logo">
+                                <a href="index.html">
+                                    <h1>law</h1>
+                                    <!-- <img src="img/logo.jpg" alt="Logo"> -->
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="top-bar-right">
+                                <div class="text">
+                                    <h2></h2>
+                                    <p></p>
+                                </div>
+                                <div class="text">
+                                    <h2></h2>
+                                    <p></p>
+                                </div>
+                                <div class="social">
+                                    <a href=""></a>
+                                    <a href=""></a>
+                                    <a href=""></a>
+                                    <a href=""></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Top Bar End -->
+
+            <!-- Nav Bar Start -->
+            <div class="nav-bar">
+                <div class="container-fluid">
+                    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+                        <a href="#" class="navbar-brand">MENU</a>
+                        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                            <div class="navbar-nav mr-auto">
+                                <a href="{% url 'homepage' %}" class="nav-item nav-link active">Home</a>
+                                <a href="{% url 'aboutus' %}" class="nav-item nav-link">About</a>
+<!--                                <a href="service.html" class="nav-item nav-link">Practice</a>-->
+<!--                                <a href="team.html" class="nav-item nav-link">Attorneys</a>-->
+<!--                                <a href="portfolio.html" class="nav-item nav-link">Case</a>-->
+                                {% if request.session.username %}
+    <div class="nav-item dropdown">
+        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User</a>
+        <div class="dropdown-menu">
+            <a href="{% url 'Userpage' %}" class="dropdown-item">User Reg/login</a>
+        </div>
+    </div>
+{% elif request.session.Username %}
+    <div class="nav-item dropdown">
+        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Lawyer</a>
+        <div class="dropdown-menu">
+            <a href="{% url 'lawyerdb' %}" class="dropdown-item">Lawyer Registration</a>
+            <a href="{% url 'lawyerlogin' %}" class="dropdown-item">Lawyer Login</a>
+        </div>
+    </div>
+{% else %}
+    <div class="nav-item dropdown">
+        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User</a>
+        <div class="dropdown-menu">
+            <a href="{% url 'Userpage' %}" class="dropdown-item">User Reg/login</a>
+        </div>
+    </div>
+    <div class="nav-item dropdown">
+        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Lawyer</a>
+        <div class="dropdown-menu">
+            <a href="{% url 'lawyerdb' %}" class="dropdown-item">Lawyer Registration</a>
+            <a href="{% url 'lawyerlogin' %}" class="dropdown-item">Lawyer Login</a>
+        </div>
+    </div>
+{% endif %}
+
+
+                       {% comment %} {% if request.session.username %}
+                            </div>
+                            <div class="container-fluid">
+                                <form class="d-flex" role="search" method="get" action="{% url 'searchBar' %}">
+                                     <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search" name="query">
+                                    <button class="btn btn-outline-success" type="submit">lawyer find</button>
+                                </form>
+                             </div>
+                       {% endif %} {% endcomment %}
+   {% if request.session.username %}
+     <p></p>
+     {% elif request.session.Username %}
+     <p></p>
+   {% else %}
+<a href="{% url 'admin_log_page' %}" class="nav-item nav-link">Admin</a>
+   {% endif %}
+                            {% if request.session.Username %}
+                            <div class="dropdown">
+
+                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                     welcome {{request.session.Username}}
+                                </a>
+
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#"></a></li>
+                                    <li><a class="dropdown-item" href="{% url 'lawyer_logout' %}">Logout</a></li>
+                                    <li><a class="dropdown-item" href="#"></a></li>
+                                </ul>
+                            </div>
+                               {% elif request.session.username %}
+                            <div class="dropdown">
+
+                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                     welcome {{request.session.username}}
+                                </a>
+
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#"></a></li>
+                                    <li><a class="dropdown-item" href="{% url 'user_logout' %}">Logout</a></li>
+<!--                                    <li><a class="dropdown-item" href="#">Something else here</a></li>-->
+                                </ul>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                    </nav>
+                </div>
+            </div>
+            <!-- Nav Bar End -->
+            
+            
+            <!-- Page Header Start -->
+            <div class="page-header">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2>About Us</h2>
+                        </div>
+                        <div class="col-12">
+                            <a href="{% url 'homepage' %}">Home</a>
+                            <a href="">About Us</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Page Header End -->
+
+
+            <!-- About Start -->
+            <div class="about">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-5 col-md-6">
+                            <div class="about-img">
+                                <img src="{{about.Image.url}}" alt="Image">
+                            </div>
+                        </div>
+                        <div class="col-lg-7 col-md-6">
+                            <div class="section-header">
+                                <h2>{{about.LegalTypes}}</h2>
+                            </div>
+                            <div class="about-text">
+                                <p>
+                                    {{about.Description}}
+                                </p>
+
+                                <a class="btn" href="">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- About End -->
+
+
+            <!-- Timeline Start -->
+            <div class="timeline">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>The six fundamental rights</h2>
+                    </div>
+                    <div class="timeline-start">
+                        <div class="timeline-container left">
+                            <div class="timeline-content">
+                                <h2><span> Article 14–18</span>Right to equality</h2>
+                                <p>
+                                    Right to Equality. The Constitution says that the government shall not deny to any person in India equality before the law or the equal protection of the laws. It means that the laws apply in the same manner to all, regardless of a person's status. This is called the rule of law.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="timeline-container right">
+                            <div class="timeline-content">
+                                <h2><span>Article 19–22</span>Right to freedom</h2>
+                                <p>
+                                   Right To Freedom is covered in Article 19, Article 21A, Article 22 of the Indian Constitution. Each one of those articles Provides Certain Protections and rights. Article 20 – protects against arbitrary arrest and detention. Article 21A – Safeguards the right to life and personal liberty.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="timeline-container left">
+                            <div class="timeline-content">
+                                <h2><span>Article 23–24</span>Right against exploitation</h2>
+                                <p>
+                                  Article 23 forbids any form of exploitation. Also, one cannot be forced to engage in labour against his/her will even if remuneration is given. Forced labour is forbidden by the Constitution. It is considered forced labour if the less-than-minimum wage is paid.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="timeline-container right">
+                            <div class="timeline-content">
+                                <h2><span>Article 25–28</span>Right to freedom of religion</h2>
+                                <p>
+                                    Article 25 (Freedom of conscience and free profession, practice, and propagation of religion) Article 25 guarantees the freedom of conscience, the freedom to profess, practice, and propagate religion to all citizens. The above-mentioned freedoms are subject to public order, health, and morality.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="timeline-container left">
+                            <div class="timeline-content">
+                                <h2><span>Article 29–30</span>Cultural and educational rights</h2>
+                                <p>
+                                    Cultural and educational rights are human rights that promote equality and respect for all cultures, religions, and languages. They include the right to freedom of expression, the right to receive an education, and the right to participate in cultural life.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="timeline-container right">
+                            <div class="timeline-content">
+                                <h2><span>Article 32–35</span>Right to constitutional remedies</h2>
+                                <p>
+                                    Article 226 along with Article 32 of the Indian Constitution guarantees every citizen the Right to Constitutional Remedies, which includes equality before the law and equal protection of laws. This right is often exercised by filing a Writ Petition in the High Courts and the Supreme Court of India.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Timeline End -->
+
+
+            <!-- Team Start -->
+<!--            <div class="team">-->
+<!--                <div class="container">-->
+<!--                    <div class="section-header">-->
+<!--                        <h2>Meet Our Expert Attorneys</h2>-->
+<!--                    </div>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-lg-3 col-md-6">-->
+<!--                            <div class="team-item">-->
+<!--                                <div class="team-img">-->
+<!--                                    <img src="{% static 'mech/img/team-1.jpg' %}" alt="Team Image">-->
+<!--                                </div>-->
+<!--                                <div class="team-text">-->
+<!--                                    <h2>Adam Phillips</h2>-->
+<!--                                    <p>Business Consultant</p>-->
+<!--                                    <div class="team-social">-->
+<!--                                        <a class="social-tw" href=""><i class="fab fa-twitter"></i></a>-->
+<!--                                        <a class="social-fb" href=""><i class="fab fa-facebook-f"></i></a>-->
+<!--                                        <a class="social-li" href=""><i class="fab fa-linkedin-in"></i></a>-->
+<!--                                        <a class="social-in" href=""><i class="fab fa-instagram"></i></a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-lg-3 col-md-6">-->
+<!--                            <div class="team-item">-->
+<!--                                <div class="team-img">-->
+<!--                                    <img src="{% static 'mech/img/team-2.jpg' %}" alt="Team Image">-->
+<!--                                </div>-->
+<!--                                <div class="team-text">-->
+<!--                                    <h2>Dylan Adams</h2>-->
+<!--                                    <p>Criminal Consultant</p>-->
+<!--                                    <div class="team-social">-->
+<!--                                        <a class="social-tw" href=""><i class="fab fa-twitter"></i></a>-->
+<!--                                        <a class="social-fb" href=""><i class="fab fa-facebook-f"></i></a>-->
+<!--                                        <a class="social-li" href=""><i class="fab fa-linkedin-in"></i></a>-->
+<!--                                        <a class="social-in" href=""><i class="fab fa-instagram"></i></a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-lg-3 col-md-6">-->
+<!--                            <div class="team-item">-->
+<!--                                <div class="team-img">-->
+<!--                                    <img src="{% static 'mech/img/team-3.jpg' %}" alt="Team Image">-->
+<!--                                </div>-->
+<!--                                <div class="team-text">-->
+<!--                                    <h2>Gloria Edwards</h2>-->
+<!--                                    <p>Divorce Consultant</p>-->
+<!--                                    <div class="team-social">-->
+<!--                                        <a class="social-tw" href=""><i class="fab fa-twitter"></i></a>-->
+<!--                                        <a class="social-fb" href=""><i class="fab fa-facebook-f"></i></a>-->
+<!--                                        <a class="social-li" href=""><i class="fab fa-linkedin-in"></i></a>-->
+<!--                                        <a class="social-in" href=""><i class="fab fa-instagram"></i></a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-lg-3 col-md-6">-->
+<!--                            <div class="team-item">-->
+<!--                                <div class="team-img">-->
+<!--                                    <img src="{% static 'mech/img/team-4.jpg' %}" alt="Team Image">-->
+<!--                                </div>-->
+<!--                                <div class="team-text">-->
+<!--                                    <h2>Josh Dunn</h2>-->
+<!--                                    <p>Immigration Consultant</p>-->
+<!--                                    <div class="team-social">-->
+<!--                                        <a class="social-tw" href=""><i class="fab fa-twitter"></i></a>-->
+<!--                                        <a class="social-fb" href=""><i class="fab fa-facebook-f"></i></a>-->
+<!--                                        <a class="social-li" href=""><i class="fab fa-linkedin-in"></i></a>-->
+<!--                                        <a class="social-in" href=""><i class="fab fa-instagram"></i></a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+            <!-- Team End -->
+
+
+            <!-- Newsletter Start -->
+<!--            <div class="newsletter">-->
+<!--                <div class="container">-->
+<!--                    <div class="section-header">-->
+<!--                        <h2>Subscribe Our Newsletter</h2>-->
+<!--                    </div>-->
+<!--                    <div class="form">-->
+<!--                        <input class="form-control" placeholder="Email here">-->
+<!--                        <button class="btn">Submit</button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+            <!-- Newsletter End -->
+
+
+            <!-- Footer Start -->
+<!--            <div class="footer">-->
+<!--                <div class="container">-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-6 col-lg-4">-->
+<!--                            <div class="footer-about">-->
+<!--                                <h2>About Us</h2>-->
+<!--                                <p>-->
+<!--                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque eu lectus a leo tristique dictum nec non quam. Suspendisse convallis, tortor eu placerat rhoncus, lorem quam iaculis felis, sed eleifend lacus neque id eros. Integer convallis volutpat neque-->
+<!--                                </p>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-6 col-lg-8">-->
+<!--                            <div class="row">-->
+<!--                        <div class="col-md-6 col-lg-4">-->
+<!--                            <div class="footer-link">-->
+<!--                                <h2>Services Areas</h2>-->
+<!--                                <a href="">Civil Law</a>-->
+<!--                                <a href="">Family Law</a>-->
+<!--                                <a href="">Business Law</a>-->
+<!--                                <a href="">Education Law</a>-->
+<!--                                <a href="">Immigration Law</a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-6 col-lg-4">-->
+<!--                            <div class="footer-link">-->
+<!--                                <h2>Useful Pages</h2>-->
+<!--                                <a href="">About Us</a>-->
+<!--                                <a href="">Practices</a>-->
+<!--                                <a href="">Attorneys</a>-->
+<!--                                <a href="">Case Studies</a>-->
+<!--                                <a href="">FAQs</a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-6 col-lg-4">-->
+<!--                            <div class="footer-contact">-->
+<!--                                <h2>Get In Touch</h2>-->
+<!--                                <p><i class="fa fa-map-marker-alt"></i>123 Street, New York, USA</p>-->
+<!--                                <p><i class="fa fa-phone-alt"></i>+012 345 67890</p>-->
+<!--                                <p><i class="fa fa-envelope"></i>info@example.com</p>-->
+<!--                                <div class="footer-social">-->
+<!--                                    <a href=""><i class="fab fa-twitter"></i></a>-->
+<!--                                    <a href=""><i class="fab fa-facebook-f"></i></a>-->
+<!--                                    <a href=""><i class="fab fa-youtube"></i></a>-->
+<!--                                    <a href=""><i class="fab fa-instagram"></i></a>-->
+<!--                                    <a href=""><i class="fab fa-linkedin-in"></i></a>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="container footer-menu">-->
+<!--                    <div class="f-menu">-->
+<!--                        <a href="">Terms of use</a>-->
+<!--                        <a href="">Privacy policy</a>-->
+<!--                        <a href="">Cookies</a>-->
+<!--                        <a href="">Help</a>-->
+<!--                        <a href="">FQAs</a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="container copyright">-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-6">-->
+<!--                            <p>&copy; <a href="https://htmlcodex.com/law-firm-website-template">HTML Codex</a>, All Right Reserved.</p>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-6">-->
+<!--                            <p>Designed By <a href="https://htmlcodex.com">HTML Codex</a></p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+            <!-- Footer End -->
+            
+            <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+        </div>
+
+        <!-- JavaScript Libraries -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+        <script src="{% static 'mech/lib/easing/easing.min.js' %}"></script>
+        <script src="{% static 'mech/lib/owlcarousel/owl.carousel.min.js' %}"></script>
+        <script src="{% static 'mech/lib/isotope/isotope.pkgd.min.js' %}"></script>
+
+        <!-- Template Javascript -->
+        <script src="{% static 'mech/js/main.js' %}"></script>
+    </body>
+</html>

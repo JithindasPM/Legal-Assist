@@ -1,0 +1,298 @@
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Kanun - Law Firm Website Template</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta content="Law Firm Website Template" name="keywords">
+        <meta content="Law Firm Website Template" name="description">
+
+        <!-- Favicon -->
+        <link href="{% static 'mech/img/favicon.ico' %}" rel="icon">
+
+        <!-- Google Font -->
+        <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@1,600;1,700;1,800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+        <!-- CSS Libraries -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+        <link href="{% static 'mech/lib/animate/animate.min.css' %}" rel="stylesheet">
+        <link href="{% static 'mech/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+        <!-- Template Stylesheet -->
+        <link href="{% static 'mech/css/style.css' %}" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="wrapper">
+            <!-- Top Bar Start -->
+            <div class="top-bar">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="logo">
+                                <a href="index.html">
+                                    <h1>law</h1>
+                                    <!-- <img src="img/logo.jpg" alt="Logo"> -->
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="top-bar-right">
+                                <div class="text">
+                                    <h2></h2>
+                                    <p></p>
+                                </div>
+                                <div class="text">
+                                    <h2></h2>
+                                    <p></p>
+                                </div>
+                                <div class="social">
+                                    <a href=""></a>
+                                    <a href=""></a>
+                                    <a href=""></a>
+                                    <a href=""></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Top Bar End -->
+
+            <!-- Nav Bar Start -->
+            <div class="nav-bar">
+                <div class="container-fluid">
+                    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+                        <a href="#" class="navbar-brand">MENU</a>
+                        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                            <div class="navbar-nav mr-auto">
+                                <a href="{% url 'homepage' %}" class="nav-item nav-link active">Home</a>
+                                <a href="{% url 'aboutus' %}" class="nav-item nav-link">About</a>
+<!--                                <a href="service.html" class="nav-item nav-link">Practice</a>-->
+<!--                                <a href="team.html" class="nav-item nav-link">Attorneys</a>-->
+<!--                                <a href="portfolio.html" class="nav-item nav-link">Case</a>-->
+                                {% if request.session.username %}
+    <div class="nav-item dropdown">
+        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User</a>
+        <div class="dropdown-menu">
+            <a href="{% url 'Userpage' %}" class="dropdown-item">User Reg/login</a>
+        </div>
+    </div>
+{% elif request.session.Username %}
+    <div class="nav-item dropdown">
+        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Lawyer</a>
+        <div class="dropdown-menu">
+            <a href="{% url 'lawyerdb' %}" class="dropdown-item">Lawyer Registration</a>
+            <a href="{% url 'lawyerlogin' %}" class="dropdown-item">Lawyer Login</a>
+        </div>
+    </div>
+{% else %}
+    <div class="nav-item dropdown">
+        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User</a>
+        <div class="dropdown-menu">
+            <a href="{% url 'Userpage' %}" class="dropdown-item">User Reg/login</a>
+        </div>
+    </div>
+    <div class="nav-item dropdown">
+        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Lawyer</a>
+        <div class="dropdown-menu">
+            <a href="{% url 'lawyerdb' %}" class="dropdown-item">Lawyer Registration</a>
+            <a href="{% url 'lawyerlogin' %}" class="dropdown-item">Lawyer Login</a>
+        </div>
+    </div>
+{% endif %}
+
+
+                       {% comment %} {% if request.session.username %}
+                            </div>
+                            <div class="container-fluid">
+                                <form class="d-flex" role="search" method="get" action="{% url 'searchBar' %}">
+                                     <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search" name="query">
+                                    <button class="btn btn-outline-success" type="submit">lawyer find</button>
+                                </form>
+                             </div>
+                       {% endif %} {% endcomment %}
+                       {% if request.session.username %} 
+                       <p></p>
+                       {% elif request.session.Username %}
+                       <p></p>
+                     {% else %}                    
+                  <a href="{% url 'admin_log_page' %}" class="nav-item nav-link">Admin</a>
+                     {% endif %}
+                            {% if request.session.Username %}
+                            {% comment %} <div class="dropdown">
+
+                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                     welcome {{request.session.Username}}
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#"></a></li>
+                                    <li><a class="dropdown-item" href="{% url 'lawyer_logout' %}">Logout</a></li>
+                                    <li><a class="dropdown-item" href="#"></a></li>
+                                </ul>
+                            </div> {% endcomment %}
+                            <a class="btn btn-secondary " href="{% url 'lawyer_logout' %}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Logout
+                           </a>
+                               {% elif request.session.username %}
+                            <div class="dropdown">
+
+                                {% comment %} <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                     welcome {{request.session.username}}
+                                </a> {% endcomment %}
+
+                                {% comment %} <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#"></a></li>
+                                    <li><a class="dropdown-item" href="{% url 'user_logout' %}">Logout</a></li>
+<!--                                    <li><a class="dropdown-item" href="#">Something else here</a></li>-->
+                                </ul> {% endcomment %}
+                                <a class="btn btn-secondary" href="{% url 'user_logout' %}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                 Logout
+                               </a>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                    </nav>
+                </div>
+            </div>
+            <!-- Nav Bar End -->
+
+
+            <!-- Page Header Start -->
+            <div class="page-header">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2>About Us</h2>
+                        </div>
+                        <div class="col-12">
+                            <a href="">Home</a>
+                            <a href="">About Us</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Page Header End -->
+
+
+            <!-- About Start -->
+            <div class="about">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-5 col-md-6">
+                            <div class="about-img">
+                                <img src="{% static 'mech/img/about.jpg' %}" alt="Image">
+                            </div>
+                        </div>
+                        <div class="col-lg-7 col-md-6">
+                            <div class="section-header">
+                                <h2>Learn About Us</h2>
+                            </div>
+                            <div class="about-text">
+                                <p>
+                                    "Welcome to our Legal Assistance platform, where we strive to provide accessible and reliable legal guidance to individuals and businesses alike. Our team of experienced legal professionals is dedicated to offering comprehensive support across various legal domains, ensuring that our clients receive the assistance they need to navigate complex legal landscapes with confidence. At Legal Assistance, we prioritize transparency, integrity, and client satisfaction, endeavoring to build lasting relationships built on trust and excellence. Whether you're seeking advice on personal matters, business ventures, or any other legal concerns, we're here to help you every step of the way. With our commitment to excellence and dedication to serving our clients' needs, you can trust Legal Assistance to be your reliable partner in the pursuit of justice and legal clarity."
+                                </p>
+
+<!--                                <a class="btn" href="">Learn More</a>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- About End -->
+
+
+            <!-- Timeline Start -->
+            <div class="timeline">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Our Service</h2>
+                    </div>
+                    <div class="timeline-start">
+                        <div class="timeline-container left">
+                            <div class="timeline-content">
+                                <h2><span></span>Welcome to Our Legal Assistance Service</h2>
+                                <p>
+                                    At Legal Assistance, we understand that navigating legal matters can be complex and overwhelming. That's why we're here to provide you with the support and guidance you need to address your legal concerns with confidence.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="timeline-container right">
+                            <div class="timeline-content">
+                                <h2><span></span>Our Mission</h2>
+                                <p>
+                                    Our mission is to empower individuals and businesses to access quality legal assistance efficiently and affordably. We believe that everyone deserves access to justice, and we're committed to breaking down barriers that may stand in the way.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="timeline-container left">
+                            <div class="timeline-content">
+                                <h2><span></span>Expertise and Experience</h2>
+                                <p>
+                                   Our team consists of experienced legal professionals who are dedicated to serving our clients' needs. Whether you're dealing with a personal injury case, seeking business legal advice, or facing a family law matter, our team has the knowledge and expertise to help you navigate the legal process effectively.
+
+
+                                </p>
+                            </div>
+                        </div>
+                        <div class="timeline-container right">
+                            <div class="timeline-content">
+                                <h2><span></span>Client-Centered Approach</h2>
+                                <p>
+                                   At Legal Assistance, we prioritize our clients' needs and objectives above all else. We take the time to listen to your concerns, understand your unique situation, and develop customized solutions tailored to your specific circumstances. Your success and satisfaction are our top priorities.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="timeline-container left">
+                            <div class="timeline-content">
+                                <h2><span></span>Transparency and Trust</h2>
+                                <p>
+                                    We believe in building strong relationships with our clients based on transparency, trust, and open communication. From the initial consultation to the resolution of your case, we'll keep you informed every step of the way, providing honest advice and realistic expectations.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="timeline-container right">
+                            <div class="timeline-content">
+                                <h2><span></span>Get Started Today</h2>
+                                <p>
+                                Whether you're facing a legal challenge or simply need guidance on a legal matter, we're here to help. Contact us today to schedule a consultation and take the first step toward resolving your legal issues with confidence.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Timeline End -->
+
+
+            <!-- Team Start -->
+
+            <!-- Newsletter End -->
+
+
+            <!-- Footer Start -->
+
+            <!-- Footer End -->
+
+            <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+        </div>
+
+        <!-- JavaScript Libraries -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+        <script src="{% static 'mech/lib/easing/easing.min.js' %}"></script>
+        <script src="{% static 'mech/lib/owlcarousel/owl.carousel.min.js' %}"></script>
+        <script src="{% static 'mech/lib/isotope/isotope.pkgd.min.js' %}"></script>
+
+        <!-- Template Javascript -->
+        <script src="{% static 'mech/js/main.js' %}"></script>
+    </body>
+</html>

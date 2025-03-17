@@ -1,0 +1,197 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <title>Login Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'loglaw/css/style.css' %}">
+
+    <style>
+      body {
+        background-color: #121212;
+        color: #D4AF37;
+        font-family: 'Lato', sans-serif;
+      }
+      
+      .ftco-section {
+        padding: 7em 0;
+      }
+      
+      .login-wrap {
+        background-color: #1E1E1E;
+        border: 1px solid #D4AF37;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+      }
+      
+      .icon {
+        width: 80px;
+        height: 80px;
+        background: #1E1E1E;
+        border-radius: 50%;
+        font-size: 30px;
+        margin: 0 auto;
+        margin-bottom: 10px;
+        border: 2px solid #D4AF37;
+      }
+      
+      .icon span {
+        color: #D4AF37;
+      }
+      
+      h3 {
+        color: #D4AF37;
+        font-weight: 300;
+      }
+      
+      .form-control {
+        background: #2D2D2D;
+        border: 1px solid #D4AF37;
+        color: #D4AF37;
+      }
+      
+      .form-control:focus {
+        border-color: #F5D742;
+        box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        background: #2D2D2D;
+        color: #D4AF37;
+      }
+      
+      .form-control::placeholder {
+        color: #A8A8A8;
+      }
+      
+      .btn-primary {
+        background: #D4AF37;
+        border-color: #D4AF37;
+        color: #121212;
+        font-weight: bold;
+      }
+      
+      .btn-primary:hover {
+        background: #F5D742;
+        border-color: #F5D742;
+        color: #121212;
+      }
+      
+      .btn-outline-dark {
+        border: 2px solid #D4AF37;
+        color: #D4AF37;
+        background: transparent;
+        margin: 0 10px;
+      }
+      
+      .btn-outline-dark:hover {
+        background: #D4AF37;
+        color: #121212;
+        border-color: #D4AF37;
+      }
+      
+      .heading-section {
+        color: #D4AF37;
+      }
+	  .form-control::placeholder {
+		color: #fff !important;
+	  }
+	  .icon {
+		width: 80px;
+		height: 80px;
+		background: #1E1E1E;
+		border-radius: 50%;
+		font-size: 30px;
+		margin: 0 auto;
+		margin-bottom: 10px;
+		border: 2px solid #D4AF37;
+		color: #D4AF37; /* Icon color */
+	  }
+	  
+	  .icon span {
+		color: #D4AF37 !important; /* Icon color */
+	  }
+	  
+	  h3 {
+		color: #D4AF37; /* Heading color */
+		font-weight: 300;
+	  }
+	  
+	  /* Ensuring the h3 tag text color is gold */
+	  h3 {
+		color: #D4AF37 !important;  /* Forcefully apply the color */
+		font-weight: 300;
+	  }
+	  
+	  
+    </style>
+  </head>
+  <body>
+    <section class="ftco-section">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-6 text-center mb-5">
+            <div class="d-flex justify-content-center px-5">
+              <a class="btn btn-outline-dark" href="{% url 'homepage' %}"><b>Home</b></a>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-md-6 col-lg-5">
+            <div class="login-wrap p-4 p-md-5">
+              <div class="icon d-flex align-items-center justify-content-center">
+                <span class="fa fa-user-o"></span>
+              </div>
+              <h3 class="text-center mb-4">Have an account?</h3>
+              <form action="{% url 'lawyerlogin' %}" class="login-form" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                  <input type="text" class="form-control rounded-left" placeholder="Username" required="required" name="user_name">
+                </div>
+                <div class="form-group d-flex">
+                  <input type="password" class="form-control rounded-left" placeholder="Password" required="required" name="pass_word">
+                </div>
+                <div class="form-group d-md-flex">
+                  <div class="w-50">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary rounded submit p-3 px-5">Get Started</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="{% static 'loglaw/js/jquery.min.js' %}"></script>
+    <script src="{% static 'loglaw/js/popper.js' %}"></script>
+    <script src="{% static 'loglaw/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'loglaw/js/main.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://unpkg.com/sweetalert@2.1.2/dist/sweetalert.min.js"></script>
+    {% if messages %}
+      {% for i in messages %}
+        {% if i.tags == 'warning' %}
+          <script>
+            swal('{{i}}','','warning')
+          </script>
+        {% elif i.tags == 'error' %}
+          <script>
+            swal('{{i}}','','error')
+          </script>
+        {% elif i.tags == 'success' %}
+          <script>
+            swal('{{i}}','','success')
+          </script>
+        {% else %}
+          <script>
+            swal('{{i}}','','info')
+          </script>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </body>
+</html>

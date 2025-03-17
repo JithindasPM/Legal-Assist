@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+{% extends 'index.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Horizontal Form</h4>
+                    <p class="card-description"> Horizontal form layout </p>
+                    <form class="forms-sample" method="post" action="{% url 'update_lawyer' updid=lawyer.id %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <div class="form-group row">
+                        <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Name</label>
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Name" name="name" value="{{lawyer.Name}}">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Qualification</label>
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" id="exampleInputEmail2" placeholder="Qualification" name="Qualification" value="{{lawyer.Qualification}}">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="exampleInputMobile" class="col-sm-3 col-form-label">EmailID</label>
+                        <div class="col-sm-9">
+                          <input type="email" class="form-control" id="exampleInputMobile" placeholder="EmailID" name="EmailID" value="{{lawyer.EmailID}}">
+                        </div>
+                      </div>
+                        <div class="form-group row">
+                        <label for="exampleInputMobile" class="col-sm-3 col-form-label">Specialization</label>
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" id="exampleInputMobile" placeholder="Specialization" name="Specialization" value="{{lawyer.Specialization}}">
+                        </div>
+                      </div>
+                        <div class="form-group row">
+                        <label for="exampleInputMobile" class="col-sm-3 col-form-label">Username</label>
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" id="exampleInputMobile" placeholder="Username" name="Username" value="{{lawyer.Username}}">
+                        </div>
+                      </div>
+                        <div class="form-group row">
+                        <label for="exampleInputMobile" class="col-sm-3 col-form-label">Appointment Time</label>
+                        <div class="col-sm-9">
+                            <h3>{{lawyer.Appointment_time}}</h3>
+                          <input type="time" class="form-control" id="exampleInputMobile" placeholder="Appointment Time" name="Appointment_Time" value="{{lawyer.Appointment_time}}">
+                        </div>
+
+                      </div>
+                        <div class="form-group row">
+                        <label for="exampleInputMobile" class="col-sm-3 col-form-label">Mobile Number</label>
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" id="exampleInputMobile" placeholder="Mobile Number" name="Mob_num" value="{{lawyer.Mob_No}}">
+                        </div>
+
+                      </div>
+                        <div class="form-group row">
+                        <label for="exampleInputMobile" class="col-sm-3 col-form-label">Payment</label>
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" id="exampleInputMobile" placeholder="payment" name="pay" value="{{lawyer.payment}}">
+                        </div>
+
+                      </div>
+
+<!--                       <div class="form-group row">-->
+<!--                        <label for="exampleInputPassword2" class="col-sm-3 col-form-label">Password</label>-->
+<!--                        <div class="col-sm-9">-->
+<!--                          <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password" name="">-->
+<!--                        </div>-->
+<!--                      </div>  -->
+
+                        <div class="form-group row">
+
+                        <label for="exampleInputMobile" class="col-sm-3 col-form-label">Image</label><br><br>
+                         <div>
+                             <img src="{{lawyer.Image.url}}" width="100px;" height="100px;">
+                         </div>
+                        <div class="col-sm-9">
+                          <input type="file" class="form-control" id="exampleInputMobile" placeholder="Image" name="image" value="{{lawyer.Image.url}}" >
+                        </div>
+                      </div>
+                         <div class="form-group row">
+                <label for="exampleInputMobile" class="col-sm-3 col-form-label">Approval</label>
+                 <div>
+            <label>Approval:</label><br>
+            <input type="radio" id="approve" name="approval" value="approve">
+            <label for="approve">Approve</label><br>
+            <input type="radio" id="reject" name="approval" value="reject">
+            <label for="reject">Reject</label><br>
+        </div>
+            </div>
+
+
+<!--                      <div class="form-group row">-->
+<!--                        <label for="exampleInputConfirmPassword2" class="col-sm-3 col-form-label">Re Password</label>-->
+<!--                        <div class="col-sm-9">-->
+<!--                          <input type="password" class="form-control" id="exampleInputConfirmPassword2" placeholder="Password">-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="form-check form-check-flat form-check-primary">-->
+<!--                        <label class="form-check-label">-->
+<!--                          <input type="checkbox" class="form-check-input"> Remember me <i class="input-helper"></i></label>-->
+<!--                      </div>-->
+                      <button type="submit" class="btn btn-primary mr-2">Update</button>
+
+                    </form>
+
+                  </div>
+                </div>
+ <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://unpkg.com/sweetalert@2.1.2/dist/sweetalert.min.js"></script>
+{% if messages %}
+  {% for i in messages %}
+     {% if i.tags == 'warning' %}
+        <script>
+            swal('{{i}}','','warning')
+        </script>
+        {% elif i.tags == 'error' %}
+        <script>
+            swal('{{i}}','','error')
+        </script>
+        {% elif i.tags == 'success' %}
+        <script>
+            swal('{{i}}','','success')
+        </script>
+        {% else %}
+        <script>
+            swal('{{i}}','','info')
+        </script>
+     {% endif %}
+  {% endfor %}
+  {% endif %}
+</body>
+
+</html>
+{% endblock %}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+{% extends 'index.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Horizontal Form</h4>
+                    <p class="card-description"> Horizontal form layout </p>
+                    <form class="forms-sample" method="post" action="{% url 'save_comp_det' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <div class="form-group row">
+                        <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Company</label>
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Description" name="description">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Image</label>
+                        <div class="col-sm-9">
+                          <input type="file" class="form-control" id="exampleInputEmail2" placeholder="Company image" name="comp_img">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="exampleInputMobile" class="col-sm-3 col-form-label">Telephone Number</label>
+                        <div class="col-sm-9">
+                          <input type="tel" id="exampleInputMobile" name="telephone_number" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required placeholder="tele number">
+                        </div>
+                      </div>
+<!--                      <div class="form-group row">-->
+<!--                        <label for="exampleInputPassword2" class="col-sm-3 col-form-label">Password</label>-->
+<!--                        <div class="col-sm-9">-->
+<!--                          <input type="text" class="form-control" id="exampleInputPassword2" placeholder="Password">-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="form-group row">-->
+<!--                        <label for="exampleInputConfirmPassword2" class="col-sm-3 col-form-label">Re Password</label>-->
+<!--                        <div class="col-sm-9">-->
+<!--                          <input type="password" class="form-control" id="exampleInputConfirmPassword2" placeholder="Password">-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="form-check form-check-flat form-check-primary">-->
+<!--                        <label class="form-check-label">-->
+<!--                          <input type="checkbox" class="form-check-input"> Remember me <i class="input-helper"></i></label>-->
+<!--                      </div>-->
+                      <div>
+                        <label style="margin-bottom:60px;">Address</label>
+                        <textarea rows="5" cols="35" style="margin-left:235px;" placeholder="Address" name="Address"></textarea>
+                      </div>
+                      <button type="submit" class="btn btn-primary mr-2">Register</button>
+
+                    </form>
+                    <div style="margin-left:200px; margin-top:-25px">
+                      <a href="{% url 'add_comp_det' %}"><button class="btn btn-dark">Cancel</button></a>
+                    </div>
+                  </div>
+                </div>
+ <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://unpkg.com/sweetalert@2.1.2/dist/sweetalert.min.js"></script>
+{% if messages %}
+  {% for i in messages %}
+     {% if i.tags == 'warning' %}
+        <script>
+            swal('{{i}}','','warning')
+        </script>
+        {% elif i.tags == 'error' %}
+        <script>
+            swal('{{i}}','','error')
+        </script>
+        {% elif i.tags == 'success' %}
+        <script>
+            swal('{{i}}','','success')
+        </script>
+        {% else %}
+        <script>
+            swal('{{i}}','','info')
+        </script>
+     {% endif %}
+  {% endfor %}
+  {% endif %}
+</body>
+</html>
+{% endblock %}
