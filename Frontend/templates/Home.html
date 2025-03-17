@@ -162,6 +162,7 @@
             <a href="{% url 'lawyerlogin' %}" class="dropdown-item">Lawyer Login</a>
         </div>
     </div>
+    <a href="{% url 'lawyer_bookings' %}" class="nav-link" >BOOKINGS</a>
 {% else %}
     <div class="nav-item dropdown">
         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User</a>
@@ -176,6 +177,7 @@
             <a href="{% url 'lawyerlogin' %}" class="dropdown-item">Lawyer Login</a>
         </div>
     </div>
+
 {% endif %}
 
 
@@ -187,6 +189,7 @@
                                     <button class="btn btn-outline-success" type="submit">lawyer find</button>
                                 </form>
                              </div> -->
+                             <a class="nav-item nav-link text-light" href="{% url 'user_bookings' %}">Bookings</a>
                              <a class="nav-item nav-link text-light" href="{% url 'chatbot' %}">Chatboat</a>
                        {% endif %}
      {% if request.session.username %} 
@@ -730,48 +733,6 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            // Open chat button click event
-            $('#openChatBtn').click(function() {
-                // Show chat sidebar
-                $('#chatSidebar').show();
-            });
-
-            // Close chat button click event
-            $('#closeChatBtn').click(function() {
-                // Hide chat sidebar
-                $('#chatSidebar').hide();
-            });
-
-            // Chat form submission event
-            $('#chatForm').submit(function(event) {
-                event.preventDefault();
-                var inputText = $('#inputText').val();
-                if (inputText.trim() === '') return;
-
-                // Display user message
-                $('#chatBox').append('<div class="user-message"><p>' + inputText + '</p></div>');
-                $('#inputText').val('');
-                $('#chatBox').scrollTop($('#chatBox')[0].scrollHeight);
-
-                // Send user message to server
-                $.ajax({
-                    url: '{% url "chatbot_view" %}', // Change to your chatbot view URL
-                    type: 'POST',
-                    data: {input_text: inputText},
-                    success: function(response) {
-                        // Display bot response
-                        $('#chatBox').append('<div class="bot-message"><p>' + response.response + '</p></div>');
-                        $('#chatBox').scrollTop($('#chatBox')[0].scrollHeight);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(error);
-                    }
-                });
-            });
-        });
-    </script>
     </body>
 
 </html>

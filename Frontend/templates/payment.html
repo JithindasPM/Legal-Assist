@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GFG</title>
+    <title>Payment</title>
     <style>
         * {
             box-sizing: border-box;
@@ -13,8 +12,7 @@
             margin: 0px;
             font-family: cursive;
         }
-        html,
-        body {
+        html, body {
             height: 100%;
         }
         body {
@@ -30,24 +28,10 @@
             border-radius: 5px;
             box-shadow: 1px 1px 10px 0px rgb(0 0 0 / 25%);
         }
-        .title {
-            text-align: center;
-            letter-spacing: 1px;
-        }
-        .muted {
-            color: #8e7f7f;
-            display: block;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        .btn_container {
-            padding: 20px;
-            text-align: center;
-        }
         .btn {
             border-radius: 4px;
             cursor: pointer;
-            padding: 4px 8px;
+            padding: 8px 16px;
             background-color: #ffaaa7;
             color: white;
             font-size: 1.2em;
@@ -58,42 +42,73 @@
 </head>
 <body>
 
-<form action="{% url 'thanks_page' %}" method="POST">
-{% csrf_token %}
-
+<form id="paymentForm">
+    {% csrf_token %}
     <div style="text-align:center; margin-top:-80px;">
-        <h1> Proceed to Payment</h1>
-        <br>
+        <h1>Proceed to Payment</h1><br>
         <h2>{{ lawyer.Name }}</h2>
         <p>{{ lawyer.Qualification }}</p>
         <p>{{ lawyer.Specialization }}</p>
-        <img src="{{lawyer.Image.url}}" alt="" width="100px" height="100px">
+        <img src="{{ lawyer.Image.url }}" alt="" width="100px" height="100px">
         <p>{{ lawyer.Appointment_time }}</p>
-        <p>{{lawyer.Mob_No}}</p>
+        <p>{{ lawyer.Mob_No }}</p>
 
+        <label for="booking_date">Select Booking Date:</label>
+        <input type="date" name="booking_date" id="booking_date" required>
+        <br><br>
 
-
-        <button class="btn">Make Payment</button>
+        <button type="button" class="btn" id="payButton">Make Payment</button>
     </div>
-
-    <!-- Include Razorpay script for payment -->
-    <script
-    src="https://checkout.razorpay.com/v1/checkout.js"
-    data-key="rzp_test_IzIBFTmzd3zzKk"
-    data-amount="{{ payy_str }}"
-    data-currency="INR"
-    data-order_id="{{ payment.order_id }}"
-    data-buttontext=""
-    data-name="Travelista"
-    data-description="A Wild Sheep Chase is the third novel by Japanese author Haruki Murakami"
-    data-image="https://example.com/your_logo.jpg"
-    data-prefill.name="Gaurav Kumar"
-    data-prefill.email="gaurav.kumar@example.com"
-    data-theme.color="#F37254">
-</script>
-
-
 </form>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+    document.getElementById('payButton').onclick = function(e) {
+        e.preventDefault();
+
+        let bookingDate = document.getElementById('booking_date').value;
+        if (!bookingDate) {
+            alert("Please select a booking date.");
+            return;
+        }
+
+        // Initiate Razorpay Payment
+        var options = {
+            "key": "rzp_test_IzIBFTmzd3zzKk",
+            "amount": "{{ payy_str }}",
+            "currency": "INR",
+            "name": "Travelista",
+            "description": "Payment for lawyer booking",
+            "image": "https://example.com/your_logo.jpg",
+            "handler": function (response) {
+                // Submit the form after payment success
+                let form = document.getElementById('paymentForm');
+                let csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                
+                fetch("", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: `booking_date=${bookingDate}&payment_id=${response.razorpay_payment_id}`
+                })
+                .then(res => {
+                    if (res.ok) {
+                        window.location.href = "{% url 'thanks_page' %}";
+                    }
+                });
+            },
+            "theme": {
+                "color": "#F37254"
+            }
+        };
+        
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    };
+</script>
 
 </body>
 </html>

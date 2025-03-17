@@ -28,3 +28,11 @@ class CustomerRequest(models.Model):
     lawyer=models.ForeignKey(LawyerDb,on_delete=models.CASCADE)
     acces=models.BooleanField(default=False)
 
+class Booking_Model(models.Model):
+    user=models.ForeignKey(UserDb,on_delete=models.CASCADE)
+    Lawyer=models.ForeignKey(LawyerDb,on_delete=models.CASCADE)
+    amount=models.CharField(max_length=100)
+    booking_date = models.DateField(null=True, blank=True)
+    created_date=models.DateField(auto_now_add=True)
+    updated_date=models.DateField(auto_now=True)
+    is_active=models.BooleanField(default=False)

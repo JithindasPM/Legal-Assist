@@ -146,6 +146,8 @@ def lawyerlogin(request):
             # Set session variables if needed
             request.session['Username'] = urn
             request.session['Password'] = ped
+            request.session['lawyer_id'] = approved_lawyer.id 
+            print(f"Logged in lawyer ID: {approved_lawyer.id}")
 
             messages.success(request, "Lawyer logged in successfully")
             return redirect(homepage)
@@ -158,7 +160,7 @@ def lawyerlogin(request):
 def lawyer_logout(request):
     del request.session['Username']
     del request.session['Password']
-    messages.error(request, "Lawyer logged Out Successfully")
+    messages.success(request, "Lawyer logged Out Successfully")
     return redirect(homepage)
     
 
@@ -173,30 +175,38 @@ import razorpay
 from django.shortcuts import render, get_object_or_404
 from .models import LawyerDb
 
+from Frontend.models import Booking_Model
 
 def payment(request, lawyers_id):
-    # Retrieve the LawyerDb object with the specified ID
     lawyer = get_object_or_404(LawyerDb, id=lawyers_id)
-
-    # Get the payment amount of the specified lawyer
     payy = lawyer.payment
-
-    # Convert the payment amount to paisa (smallest currency unit)
-    amount = int(payy * 100)  # Assuming payment amount is in rupees
-
-    # Convert amount to string for printing
+    amount = int(payy * 100)  # Convert to paisa for Razorpay
     payy_str = str(amount)
+    total = int(payy_str) / 100
 
-    # Print each character of the payment amount
-    for ptotl in payy_str:
-        print(ptotl)
+    user_id = request.session.get('id')
+    if not user_id:
+        messages.error(request, "User not logged in.")
+        return redirect('userlogin')
+
+    user = get_object_or_404(UserDb, id=user_id)
 
     if request.method == "POST":
-        order_currency = 'INR'
-        client = razorpay.Client(auth=('rzp_test_IzIBFTmzd3zzKk', 'mMvIdZd7a4EU1pMd9tSQEbE0'))
-        payment = client.order.create({'amount': amount, 'currency': order_currency, 'payment_capture': '1'})
+        booking_date = request.POST.get('booking_date')
+        payment_id = request.POST.get('payment_id')
 
-    return render(request, "payment.html", {'payy_str': payy_str, 'lawyer':lawyer})
+        if booking_date and payment_id:
+            Booking_Model.objects.create(
+                user=user,
+                Lawyer=lawyer,
+                amount=total,
+                booking_date=booking_date
+            )
+            messages.success(request, "Booking and payment initiated successfully.")
+            return JsonResponse({'status': 'success'})
+
+    return render(request, "payment.html", {'payy_str': payy_str, 'lawyer': lawyer})
+
 
 
 
@@ -217,35 +227,6 @@ def searchBar(request):
         return render(request, "Lawyer_Search_result.html", {'vak': vak})
 
 
-@csrf_exempt
-def chatbot_view(request):
-    if request.method == 'POST':
-        user_input = request.POST.get('input_text', '')
-
-        if user_input.lower() == 'exit':
-            return JsonResponse({'response': 'Thank you for using Chatbot. Have a great day ahead'})
-
-        if user_input.lower() in ['hi', 'hello', 'hey', 'hy']:
-            return JsonResponse({'response': 'Hello, welcome to Legal Chatbot. How can I assist you today!'})
-
-        if user_input.lower() in ['bye', 'by', 'thank you', 'thanks']:
-            return JsonResponse({'response': 'Bye, and have a good day'})
-
-        question = user_input.strip()
-        if len(question) < 4:
-            return JsonResponse({'response': 'Please enter a valid question!'})
-
-        # docs = document_search.similarity_search(user_input)
-        # bot_response = chain.run(input_documents=docs, question=question)
-
-        # return JsonResponse({'response': bot_response})
-    else:
-        return JsonResponse({'response': 'Invalid request'}, status=400)
-
-
-class ChatBotView(TemplateView):
-    template_name ="chatbot.html"
-
 
 def aproval(request, pk):
     user = request.user
@@ -255,16 +236,17 @@ def aproval(request, pk):
     if not existing_request:
         CustomerRequest.objects.create(user=user, lawyer_id=lawyer_id)
     return redirect('payment')  # Redirect to payment page after request approval
-def lawyer_sub(request):
-    return render(request, "Subscription.html")
 
-def payment_law(request):
-    if request.method=="POST":
-        amount=50000
-        order_currency='INR'
-        client = razorpay.Client(auth=('rzp_test_IzIBFTmzd3zzKk','mMvIdZd7a4EU1pMd9tSQEbE0'))
-        payment=client.order.create({'amount':amount,'currency':'INR','payment_capture':'1'})
-    return render(request,"pay.html")
+# def lawyer_sub(request):
+#     return render(request, "Subscription.html")
+
+# def payment_law(request):
+#     if request.method=="POST":
+#         amount=50000
+#         order_currency='INR'
+#         client = razorpay.Client(auth=('rzp_test_IzIBFTmzd3zzKk','mMvIdZd7a4EU1pMd9tSQEbE0'))
+#         payment=client.order.create({'amount':amount,'currency':'INR','payment_capture':'1'})
+#     return render(request,"pay.html")
 
 def thanks_page(request):
     return render(request, "thanks.html")
@@ -354,6 +336,72 @@ class Groq_View(View):
         })
         
 
+# def user_bookings(request):
+#     # Retrieve user ID from session
+#     user_id = request.session.get('id')
+    
+#     if not user_id:
+#         messages.error(request, "You must be logged in to view bookings.")
+#         return redirect('userlogin')
+    
+#     user = get_object_or_404(UserDb, id=user_id)
+
+#     bookings = Booking_Model.objects.filter(user=user).order_by('-created_date')
+
+#     return render(request, "user_bookings.html", {'bookings': bookings})
+
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+def user_bookings(request):
+    # Retrieve user ID from session
+    user_id = request.session.get('id')
+    
+    if not user_id:
+        messages.error(request, "You must be logged in to view bookings.")
+        return redirect('userlogin')
+    
+    user = get_object_or_404(UserDb, id=user_id)
+
+    bookings_list = Booking_Model.objects.filter(user=user).order_by('-created_date')
+    
+    # Pagination: 5 bookings per page
+    paginator = Paginator(bookings_list, 5)  
+    page = request.GET.get('page')
+    
+    try:
+        bookings = paginator.page(page)
+    except PageNotAnInteger:
+        bookings = paginator.page(1)
+    except EmptyPage:
+        bookings = paginator.page(paginator.num_pages)
+
+    return render(request, "user_bookings.html", {'bookings': bookings})
 
     
+def lawyer_bookings(request):
+    
+    lawyer_id = request.session.get('lawyer_id')
+    print(lawyer_id)
+
+    if not lawyer_id:
+        messages.error(request, "You must be logged in to view bookings.")
+        return redirect('lawyer_log')
+
+    lawyer = get_object_or_404(LawyerDb, id=lawyer_id)
+
+    bookings_list = Booking_Model.objects.filter(Lawyer=lawyer).order_by('-created_date')
+
+    print(f"Total bookings found: {bookings_list.count()}")  # Debugging
+
+    paginator = Paginator(bookings_list, 5)
+    page = request.GET.get('page')
+
+    try:
+        bookings = paginator.page(page)
+    except PageNotAnInteger:
+        bookings = paginator.page(1)
+    except EmptyPage:
+        bookings = paginator.page(paginator.num_pages)
+
+    return render(request, "lawyer_booking.html", {'bookings': bookings})
 
