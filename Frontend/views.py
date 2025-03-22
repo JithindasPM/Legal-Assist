@@ -333,19 +333,6 @@ class Groq_View(View):
         })
         
 
-# def user_bookings(request):
-#     # Retrieve user ID from session
-#     user_id = request.session.get('id')
-    
-#     if not user_id:
-#         messages.error(request, "You must be logged in to view bookings.")
-#         return redirect('userlogin')
-    
-#     user = get_object_or_404(UserDb, id=user_id)
-
-#     bookings = Booking_Model.objects.filter(user=user).order_by('-created_date')
-
-#     return render(request, "user_bookings.html", {'bookings': bookings})
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -401,4 +388,100 @@ def lawyer_bookings(request):
         bookings = paginator.page(paginator.num_pages)
 
     return render(request, "lawyer_booking.html", {'bookings': bookings})
+
+
+
+import random
+from django.core.mail import send_mail
+from django.shortcuts import render
+from django.http import JsonResponse
+from django.contrib.auth.hashers import make_password
+from .models import UserDb
+
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def send_otp(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+
+        try:
+            user = UserDb.objects.get(username=username)
+            otp = str(random.randint(100000, 999999))  # Generate a 6-digit OTP
+            
+            # Store OTP in session
+            request.session["otp"] = otp
+            request.session["otp_user"] = username  # Store username for verification
+            
+            # Send OTP to email
+            send_mail(
+                "Password Reset OTP",
+                f"Your OTP for password reset is: {otp}",
+                "your_email@example.com",  # Change this to your sender email
+                [user.EmailId],
+                fail_silently=False,
+            )
+            return JsonResponse({"message": "OTP sent successfully!"})
+
+        except UserDb.DoesNotExist:
+            return JsonResponse({"error": "Username not found!"}, status=400)
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def verify_otp(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        entered_otp = request.POST.get("otp")
+
+        stored_otp = request.session.get("otp")
+        stored_username = request.session.get("otp_user")
+
+        print(f"Stored OTP: {stored_otp}, Entered OTP: {entered_otp}, Stored Username: {stored_username}, Entered Username: {username}")
+
+        if stored_otp and stored_username and stored_username == username and entered_otp == stored_otp:
+            del request.session["otp"]  # Remove OTP after verification
+            del request.session["otp_user"]  # Remove username from session
+            return JsonResponse({"message": "OTP verified successfully!", "redirect_url": "/reset-password-page/"})
+        else:
+            return JsonResponse({"error": "Invalid OTP. Please try again."})
+
+    return JsonResponse({"error": "Invalid request method."}, status=400)
+
+
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.hashers import make_password
+
+@csrf_exempt
+def reset_password(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        new_password = request.POST.get("new_password")
+
+        try:
+            user = UserDb.objects.get(username=username)
+            user.password = (new_password)  # Hash the new password
+            user.save()
+            
+            return JsonResponse({"message": "Password reset successful!", "redirect_url": "/"})  # Redirect to homepage
+
+        except UserDb.DoesNotExist:
+            return JsonResponse({"error": "Username not found!"}, status=400)
+
+    return JsonResponse({"error": "Invalid request method."}, status=400)
+
+
+
+# HTML Page Render Functions
+def request_otp_page(request):
+    return render(request, "request_otp.html")
+
+def verify_otp_page(request):
+    return render(request, "verify_otp.html")
+
+def reset_password_page(request):
+    return render(request, "reset_password.html")
 

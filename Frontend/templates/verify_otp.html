@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #121212;
+            color: #D4AF37; /* Gold color */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: linear-gradient(45deg, #0a0a0a 25%, #121212 25%, #121212 50%, #0a0a0a 50%, #0a0a0a 75%, #121212 75%, #121212 100%);
+            background-size: 20px 20px;
+        }
+        
+        .container {
+            background-color: rgba(18, 18, 18, 0.95);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            padding: 40px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            border: 1px solid #D4AF37;
+        }
+        
+        h2 {
+            margin-bottom: 30px;
+            font-size: 28px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #D4AF37;
+            text-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+        }
+        
+        .input-group {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .input-group label {
+            position: absolute;
+            left: 0;
+            top: 0;
+            padding: 10px;
+            color: #D4AF37;
+            transition: 0.3s;
+            pointer-events: none;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            color: #D4AF37;
+            background-color: transparent;
+            border: none;
+            border-bottom: 2px solid #D4AF37;
+            outline: none;
+            transition: 0.3s;
+        }
+        
+        .input-group input:focus,
+        .input-group input:valid {
+            border-bottom-color: #FFC107;
+        }
+        
+        .input-group input:focus + label,
+        .input-group input:valid + label {
+            top: -24px;
+            left: 0;
+            font-size: 14px;
+            color: #FFC107;
+        }
+        
+        button {
+            background: linear-gradient(to right, #D4AF37, #FFC107);
+            color: #121212;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 3px 5px rgba(212, 175, 55, 0.3);
+            width: 100%;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.5);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        #response {
+            margin-top: 20px;
+            color: #FFC107;
+            font-weight: 500;
+            min-height: 24px;
+        }
+        
+        .logo {
+            margin-bottom: 20px;
+            font-size: 40px;
+            color: #D4AF37;
+        }
+        
+        .timer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #D4AF37;
+        }
+        
+        .timer span {
+            font-weight: bold;
+            color: #FFC107;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🔐</div>
+        <h2>Verify OTP</h2>
+        <form id="verifyOtpForm">
+            {% csrf_token %}
+            <div class="input-group">
+                <input type="text" id="username" name="username" required>
+                <label for="username">Username</label>
+            </div>
+            
+            <div class="input-group">
+                <input type="text" id="otp" name="otp" maxlength="6" required>
+                <label for="otp">Enter OTP</label>
+            </div>
+            
+            <button type="submit">Verify OTP</button>
+        </form>
+        <p id="response"></p>
+        <p class="timer">OTP expires in <span id="countdown">05:00</span></p>
+    </div>
+
+    <script>
+        // Countdown timer for OTP expiration (5 minutes)
+        function startCountdown() {
+            var timeLeft = 5 * 60; // 5 minutes in seconds
+            var countdownElement = document.getElementById("countdown");
+            
+            var countdownTimer = setInterval(function() {
+                var minutes = Math.floor(timeLeft / 60);
+                var seconds = timeLeft % 60;
+                
+                countdownElement.textContent = 
+                    (minutes < 10 ? "0" + minutes : minutes) + ":" + 
+                    (seconds < 10 ? "0" + seconds : seconds);
+                
+                if (--timeLeft < 0) {
+                    clearInterval(countdownTimer);
+                    countdownElement.textContent = "00:00";
+                    document.getElementById("response").innerText = "OTP has expired. Please request a new one.";
+                    document.getElementById("response").style.color = "#FF6B6B";
+                }
+            }, 1000);
+        }
+        
+        // Start countdown when page loads
+        startCountdown();
+
+        document.getElementById("verifyOtpForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            var responseEl = document.getElementById("response");
+            
+            responseEl.innerText = "Verifying OTP...";
+            
+            fetch("{% url 'verify_otp' %}", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                responseEl.innerText = data.message || data.error;
+                
+                if (data.message === "OTP verified successfully!") {
+                    responseEl.style.color = "#D4AF37";
+                    setTimeout(() => {
+                        window.location.href = "{% url 'reset_password_page' %}";
+                    }, 2000);
+                } else {
+                    responseEl.style.color = "#FF6B6B";
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                responseEl.innerText = "An error occurred. Please try again.";
+                responseEl.style.color = "#FF6B6B";
+            });
+        });
+    </script>
+</body>
+</html>

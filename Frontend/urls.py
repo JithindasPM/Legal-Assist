@@ -2,6 +2,9 @@ from django.urls import path
 from Frontend import views
 from Frontend.views import Groq_View
 
+from .views import send_otp, verify_otp, reset_password
+from .views import send_otp, verify_otp, reset_password, request_otp_page, verify_otp_page, reset_password_page
+
 
 urlpatterns=[
     path('homepage/',views.homepage,name="homepage"),
@@ -24,7 +27,12 @@ urlpatterns=[
     path('user/bookings/', views.user_bookings, name='user_bookings'),
     path('lawyer/bookings/', views.lawyer_bookings, name='lawyer_bookings'),
     
-
+    path('send-otp/', send_otp, name='send_otp'),
+    path('verify-otp/', verify_otp, name='verify_otp'),
+    path('reset-password/', reset_password, name='reset_password'),
+    path('request-otp/', request_otp_page, name='request_otp_page'),
+    path('verify-otp-page/', verify_otp_page, name='verify_otp_page'),
+    path('reset-password-page/', reset_password_page, name='reset_password_page'),
 
 ]
 

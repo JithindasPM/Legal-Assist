@@ -20,8 +20,11 @@ class UserDb(models.Model):
     Name=models.CharField(max_length=50,null=True,blank=True)
     EmailId=models.EmailField(max_length=50,null=True,blank=True)
     Phn_No=models.IntegerField(null=True,blank=True)
-    username=models.CharField(max_length=50,null=True,blank=True)
+    username=models.CharField(max_length=50,null=True,blank=True,unique=True)
     password=models.CharField(max_length=50,null=True,blank=True)
+    
+    def __str__(self):
+        return self.username
 
 class CustomerRequest(models.Model):
     user=models.ForeignKey(UserDb,on_delete=models.CASCADE)
