@@ -128,3 +128,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 RAZOR_KEY_ID = 'rzp_test_IzIBFTmzd3zzKk'
 RAZOR_KEY_SECRET = 'mMvIdZd7a4EU1pMd9tSQEbE0'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'jithindas2123@gmail.com'
+EMAIL_HOST_PASSWORD = 'cmki vrsq bzro xfgy'  # Use an App Password if 2FA is enabled
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+LOGIN_URL = 'login'

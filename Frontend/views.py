@@ -114,22 +114,29 @@ def saveuser(req):
         return redirect(Userpage)
 
 
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import UserDb  # Import your user model
+
 def userlogin(request):
     if request.method == "POST":
         una = request.POST.get('username')
         psd = request.POST.get('password')
         user = UserDb.objects.filter(username=una, password=psd).first()
+        
         if user:
             request.session['id'] = user.id  # Adding user ID to the session
             request.session['username'] = una
             request.session['password'] = psd
             messages.success(request, "User logged in successfully")
-            return redirect(homepage)
+            return redirect('homepage')  # Use the name of your homepage URL pattern
         else:
             messages.error(request, "Invalid username or password")
-            return redirect(userlogin)
-    else:
-        return redirect(userlogin)
+            return redirect('userlogin')  # Redirect properly to the login page
+
+    return render(request, 'User_Reg_log.html')  # Ensure login page is rendered properly
+
 
 def lawyer_log(request):
     return render(request, "lawyer_log.html")
@@ -237,16 +244,6 @@ def aproval(request, pk):
         CustomerRequest.objects.create(user=user, lawyer_id=lawyer_id)
     return redirect('payment')  # Redirect to payment page after request approval
 
-# def lawyer_sub(request):
-#     return render(request, "Subscription.html")
-
-# def payment_law(request):
-#     if request.method=="POST":
-#         amount=50000
-#         order_currency='INR'
-#         client = razorpay.Client(auth=('rzp_test_IzIBFTmzd3zzKk','mMvIdZd7a4EU1pMd9tSQEbE0'))
-#         payment=client.order.create({'amount':amount,'currency':'INR','payment_capture':'1'})
-#     return render(request,"pay.html")
 
 def thanks_page(request):
     return render(request, "thanks.html")
