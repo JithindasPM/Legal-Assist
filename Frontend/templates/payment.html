@@ -64,6 +64,10 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
+    window.onload = function () {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById("booking_date").setAttribute("min", today);
+    };
     document.getElementById('payButton').onclick = function(e) {
         e.preventDefault();
 

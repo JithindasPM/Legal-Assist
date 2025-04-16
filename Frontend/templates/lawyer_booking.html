@@ -82,14 +82,30 @@
                     <th>Amount</th>
                     <th>Requested Date</th>
                     <th>Booking Date</th>
+                    <th>Approval Status</th>
+                    <th>Action</th>
                 </tr>
                 {% for booking in bookings %}
-                <tr>
-                    <td>{{ booking.user.Name }}</td>
-                    <td>{{ booking.amount }}</td>
-                    <td>{{ booking.created_date }}</td>
-                    <td>{{ booking.booking_date }}</td>
-                </tr>
+                <form method="POST" action="{% url 'update_approval' booking.id %}">
+                    {% csrf_token %}
+                    <tr>
+                        <td>{{ booking.user.Name }}</td>
+                        <td>{{ booking.amount }}</td>
+                        <td>{{ booking.created_date }}</td>
+                        <td>{{ booking.booking_date }}</td>
+                        <td>
+                            <select name="approval_status" class="form-select form-select-sm" style="background-color: #1e1e1e; color: #f5c518;">
+                                <option value="Pending" {% if booking.approval_status == "Pending" %}selected{% endif %}>Pending</option>
+                                <option value="Approved" {% if booking.approval_status == "Approved" %}selected{% endif %}>Approved</option>
+                                <option value="Rejected" {% if booking.approval_status == "Rejected" %}selected{% endif %}>Rejected</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-warning btn-sm">Update</button>
+                        </td>
+                    </tr>
+                </form>
+                
                 {% endfor %}
             </table>
         </div>

@@ -33,6 +33,7 @@ urlpatterns=[
     path('request-otp/', request_otp_page, name='request_otp_page'),
     path('verify-otp-page/', verify_otp_page, name='verify_otp_page'),
     path('reset-password-page/', reset_password_page, name='reset_password_page'),
+    path('update-approval/<int:booking_id>/', views.update_approval_status, name='update_approval'),
 
 ]
 

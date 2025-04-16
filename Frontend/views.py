@@ -365,7 +365,6 @@ def user_bookings(request):
 def lawyer_bookings(request):
     
     lawyer_id = request.session.get('lawyer_id')
-    print(lawyer_id)
 
     if not lawyer_id:
         messages.error(request, "You must be logged in to view bookings.")
@@ -374,8 +373,6 @@ def lawyer_bookings(request):
     lawyer = get_object_or_404(LawyerDb, id=lawyer_id)
 
     bookings_list = Booking_Model.objects.filter(Lawyer=lawyer).order_by('-created_date')
-
-    print(f"Total bookings found: {bookings_list.count()}")  # Debugging
 
     paginator = Paginator(bookings_list, 5)
     page = request.GET.get('page')
@@ -484,4 +481,47 @@ def verify_otp_page(request):
 
 def reset_password_page(request):
     return render(request, "reset_password.html")
+
+
+from django.shortcuts import redirect, get_object_or_404
+from .models import Booking_Model
+
+from django.core.mail import send_mail
+from django.shortcuts import redirect, get_object_or_404
+from .models import Booking_Model
+
+def update_approval_status(request, booking_id):
+    if request.method == 'POST':
+        booking = get_object_or_404(Booking_Model, id=booking_id)
+        new_status = request.POST.get('approval_status')
+        booking.approval_status = new_status
+        booking.save()
+
+        # Email logic
+        subject = ''
+        message = ''
+        recipient = booking.user.EmailId
+
+        if new_status == 'Approved':
+            subject = 'Your Booking is Approved'
+            message = f"Hi {booking.user.Name},\n\nYour booking with lawer {booking.Lawyer.Name} has been approved.\n\nThank you!"
+        elif new_status == 'Rejected':
+            subject = 'Your Booking is Rejected'
+            message = (
+                f"Hi {booking.user.Name},\n\n"
+                f"Unfortunately, your booking was rejected by the lawyer.\n"
+                f"Your payment of ₹{booking.amount} will be refunded shortly.\n\n"
+                "Sorry for the inconvenience."
+            )
+
+        if subject and message:
+            send_mail(
+                subject,
+                message,
+                'your_email@example.com',  # FROM email
+                [recipient],
+                fail_silently=False,
+            )
+
+        return redirect(request.META.get('HTTP_REFERER', 'homepage'))
 

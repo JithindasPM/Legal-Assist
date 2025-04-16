@@ -82,6 +82,7 @@
                     <th>Amount</th>
                     <th>Requested Date</th>
                     <th>Booking Date</th>
+                    <th>Status</th>
                 </tr>
                 {% for booking in bookings %}
                 <tr>
@@ -89,6 +90,7 @@
                     <td>{{ booking.amount }}</td>
                     <td>{{ booking.created_date }}</td>
                     <td>{{ booking.booking_date }}</td>
+                    <td>{{ booking.approval_status }}</td>
                 </tr>
                 {% endfor %}
             </table>
